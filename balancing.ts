@@ -7,7 +7,7 @@
 /**
  * Custom blocks
  */
-//% weight=100 color=#1d1f1d icon="\uf516"
+//% weight=100 color=#1d1f1d icon="\uf24e"
 namespace Balancovani {
 
     let boundary = 30
