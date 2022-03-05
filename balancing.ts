@@ -23,7 +23,6 @@ namespace Balancovani {
     //% block="Spusť hru s tolerancí %tolerance"
     export function SpustitHru(tolerance: number): void {
         boundary = tolerance
-        isGameInProgress = true
         basic.showLeds(`
         . . . . .
         . . . . .
@@ -34,6 +33,8 @@ namespace Balancovani {
         x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - boundary, boundary, 0, 4) / 0.8)
         y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - boundary, boundary, 0, 4) / 0.8)
         led.plot(x, y)    
+        isGameInProgress = true
+
     }
 
     /**
@@ -50,13 +51,32 @@ namespace Balancovani {
                 led.unplot(prevX, prevY)
                 led.plot(x, y)
             }
-            if (x == 0 || x == 4 || y == 0 || y == 4) {
-                basic.showIcon(IconNames.Angry)
-                isGameInProgress = false
-                soundExpression.sad.playUntilDone()
-                music.setVolume(255)
-            }
+
         }
+    }
+
+    /**
+    * Zkontroluje, jestli vejce nespadlo
+    */
+    //% block="Při pádu vejce"
+    export function onEggDrop(action: () => void) {
+        const myEventID = 111 + Math.randomRange(0, 100); // semi-unique
+
+        control.onEvent(myEventID, 0, function () {
+            control.inBackground(() => {
+                action()
+            })
+        })
+
+        control.inBackground(() => {
+            while (true) {
+                if (isGameInProgress && (x == 0 || x == 4 || y == 0 || y == 4)) {
+                    isGameInProgress = false
+                    control.raiseEvent(myEventID, 1)
+                }
+                basic.pause(20)
+            }
+        })
     }
 
 
