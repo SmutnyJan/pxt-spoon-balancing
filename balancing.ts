@@ -21,7 +21,7 @@ namespace Balancovani {
     * Spustí hru a nastaví toleranci
     */
     //% block="Spusť hru s tolerancí %tolerance"
-    export function SpustitHru(tolerance: number): void {
+    export function spustitHru(tolerance: number): void {
         boundary = tolerance
         basic.showLeds(`
         . . . . .
@@ -41,7 +41,7 @@ namespace Balancovani {
     * Aktualizuje LEDky
     */
     //% block="Aktualizuj"
-    export function Aktualizace(): void {
+    export function aktualizace(): void {
         if (isGameInProgress) {
             prevX = x
             prevY = y
