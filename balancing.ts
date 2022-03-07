@@ -1,28 +1,19 @@
-/**
- * Použijte tento soubor k definování personalizovaných funkcí a bloků.
- * Přečtěte si více na https://makecode.microbit.org/blocks/custom
- */
-
-
-/**
- * Custom blocks
- */
-//% weight=100 color=#1d1f1d icon="\uf24e"
+//% weight=100 color=#1d1f1d icon="\uf24e" block="Balancování"
 namespace Balancovani {
 
-    let boundary = 30
-    let isGameInProgress = false
+    let okraje = 30
+    let probihaHra = false
     let x = 0
     let y = 0
-    let prevX = 0
-    let prevY = 0
+    let predchoziX = 0
+    let predchoziY = 0
     
     /**
     * Spustí hru a nastaví toleranci
     */
     //% block="Spusť hru s tolerancí %tolerance"
     export function spustitHru(tolerance: number): void {
-        boundary = tolerance
+        okraje = tolerance
         basic.showLeds(`
         . . . . .
         . . . . .
@@ -30,10 +21,10 @@ namespace Balancovani {
         . . . . .
         . . . . .
         `)
-        x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - boundary, boundary, 0, 4) / 0.8)
-        y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - boundary, boundary, 0, 4) / 0.8)
+        x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - okraje, okraje, 0, 4) / 0.8)
+        y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - okraje, okraje, 0, 4) / 0.8)
         led.plot(x, y)    
-        isGameInProgress = true
+        probihaHra = true
 
     }
 
@@ -42,13 +33,13 @@ namespace Balancovani {
     */
     //% block="Aktualizuj"
     export function aktualizace(): void {
-        if (isGameInProgress) {
-            prevX = x
-            prevY = y
-            x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - boundary, boundary, 0, 4) / 0.8)
-            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - boundary, boundary, 0, 4) / 0.8)
-            if (x != prevX || y != prevY) {
-                led.unplot(prevX, prevY)
+        if (probihaHra) {
+            predchoziX = x
+            predchoziY = y
+            x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - okraje, okraje, 0, 4) / 0.8)
+            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - okraje, okraje, 0, 4) / 0.8)
+            if (x != predchoziX || y != predchoziY) {
+                led.unplot(predchoziX, predchoziY)
                 led.plot(x, y)
             }
 
@@ -57,22 +48,23 @@ namespace Balancovani {
 
     /**
     * Zkontroluje, jestli vejce nespadlo
+    * @akce Příkazy, které se provedou, pokud dojde k pádu vejce
     */
     //% block="Při pádu vejce"
-    export function onEggDrop(action: () => void) {
-        const myEventID = 111 + Math.randomRange(0, 100); // semi-unique
+    export function kdyzSpadneVejce(akce: () => void) {
+        const eventId = 111 + Math.randomRange(0, 100);
 
-        control.onEvent(myEventID, 0, function () {
+        control.onEvent(eventId, 0, function () {
             control.inBackground(() => {
-                action()
+                akce()
             })
         })
 
         control.inBackground(() => {
             while (true) {
-                if (isGameInProgress && (x == 0 || x == 4 || y == 0 || y == 4)) {
-                    isGameInProgress = false
-                    control.raiseEvent(myEventID, 1)
+                if (probihaHra && (x == 0 || x == 4 || y == 0 || y == 4)) {
+                    probihaHra = false
+                    control.raiseEvent(eventId, 1)
                 }
                 basic.pause(20)
             }
