@@ -16,7 +16,8 @@ namespace Balancovani {
     
     /**
     * Spustí hru a nastaví toleranci
-    */
+    * @obtiznost Obtížnost hry
+    */  
     //% block="Spusť hru s obtížností %obtiznost"
     export function spustitHru(obtiznost: Difficulty): void {
         okraje = obtiznost
@@ -55,7 +56,7 @@ namespace Balancovani {
 
     /**
     * Zkontroluje, jestli vejce nespadlo
-    * @akce Příkazy, které se provedou, pokud dojde k pádu vejce
+    * @akce Bloky, které se provedou, pokud dojde k pádu vejce
     */
     //% block="Při pádu vejce"
     export function kdyzSpadneVejce(akce: () => void) {
