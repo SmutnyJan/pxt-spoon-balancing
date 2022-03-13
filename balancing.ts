@@ -1,3 +1,9 @@
+enum Difficulty {
+    Jednoducha = 100,
+    Stredni = 50,
+    Tezka = 25,
+}
+
 //% weight=100 color=#1d1f1d icon="\uf24e" block="Balancování"
 namespace Balancovani {
 
@@ -11,9 +17,9 @@ namespace Balancovani {
     /**
     * Spustí hru a nastaví toleranci
     */
-    //% block="Spusť hru s tolerancí %tolerance"
-    export function spustitHru(tolerance: number): void {
-        okraje = tolerance
+    //% block="Spusť hru s obtížností %obtiznost"
+    export function spustitHru(obtiznost: Difficulty): void {
+        okraje = obtiznost
         basic.showLeds(`
         . . . . .
         . . . . .
@@ -21,8 +27,9 @@ namespace Balancovani {
         . . . . .
         . . . . .
         `)
-        x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - okraje, okraje, 0, 4) / 0.8)
-        y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - okraje, okraje, 0, 4) / 0.8)
+
+        x = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8))
+        y = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8))
         led.plot(x, y)    
         probihaHra = true
 
@@ -36,8 +43,8 @@ namespace Balancovani {
         if (probihaHra) {
             predchoziX = x
             predchoziY = y
-            x = Math.floor(Math.map(input.rotation(Rotation.Roll), 0 - okraje, okraje, 0, 4) / 0.8)
-            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), 0 - okraje, okraje, 0, 4) / 0.8)
+            x = Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8)
+            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8)
             if (x != predchoziX || y != predchoziY) {
                 led.unplot(predchoziX, predchoziY)
                 led.plot(x, y)

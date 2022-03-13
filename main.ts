@@ -1,5 +1,5 @@
 input.onButtonPressed(Button.B, function () {
-    Balancovani.spustitHru(50)
+    Balancovani.spustitHru(Difficulty.Stredni)
 })
 Balancovani.kdyzSpadneVejce(function () {
     soundExpression.giggle.play()
