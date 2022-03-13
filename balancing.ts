@@ -15,7 +15,7 @@ namespace Balancovani {
     let predchoziY = 0
     
     /**
-    * Spustí hru a nastaví toleranci
+    * Spustí hru s obtížností
     * @obtiznost Obtížnost hry
     */  
     //% block="Spusť hru s obtížností %obtiznost"
