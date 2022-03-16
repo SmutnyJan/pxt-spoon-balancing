@@ -5,22 +5,22 @@ enum Difficulty {
 }
 
 //% weight=100 color=#1d1f1d icon="\uf24e" block="Balancování"
-namespace Balancovani {
+namespace balancing {
 
-    let okraje = 30
-    let probihaHra = false
+    let boundary = 30
+    let isGameInProgress = false
     let x = 0
     let y = 0
-    let predchoziX = 0
-    let predchoziY = 0
+    let previousX = 0
+    let previousY = 0
     
     /**
     * Spustí hru s obtížností
-    * @obtiznost Obtížnost hry
+    * @difficulty Obtížnost hry
     */  
-    //% block="Spusť hru s obtížností %obtiznost"
-    export function spustitHru(obtiznost: Difficulty): void {
-        okraje = obtiznost
+    //% block="Spusť hru s obtížností %difficulty"
+    export function playGame(difficulty: Difficulty): void {
+        boundary = difficulty
         basic.showLeds(`
         . . . . .
         . . . . .
@@ -29,10 +29,10 @@ namespace Balancovani {
         . . . . .
         `)
 
-        x = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8))
-        y = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8))
+        x = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - boundary), 180 - (180 - boundary), -1, 5) / 0.8))
+        y = Math.floor(Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - boundary), 180 - (180 - boundary), -1, 5) / 0.8))
         led.plot(x, y)    
-        probihaHra = true
+        isGameInProgress = true
 
     }
 
@@ -40,14 +40,14 @@ namespace Balancovani {
     * Aktualizuje LEDky
     */
     //% block="Aktualizuj"
-    export function aktualizace(): void {
-        if (probihaHra) {
-            predchoziX = x
-            predchoziY = y
-            x = Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8)
-            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - okraje), 180 - (180 - okraje), -1, 5) / 0.8)
-            if (x != predchoziX || y != predchoziY) {
-                led.unplot(predchoziX, predchoziY)
+    export function tick(): void {
+        if (isGameInProgress) {
+            previousX = x
+            previousY = y
+            x = Math.floor(Math.map(input.rotation(Rotation.Roll), -180 + (180 - boundary), 180 - (180 - boundary), -1, 5) / 0.8)
+            y = Math.floor(Math.map(input.rotation(Rotation.Pitch), -180 + (180 - boundary), 180 - (180 - boundary), -1, 5) / 0.8)
+            if (x != previousX || y != previousY) {
+                led.unplot(previousX, previousY)
                 led.plot(x, y)
             }
 
@@ -59,19 +59,19 @@ namespace Balancovani {
     * @akce Bloky, které se provedou, pokud dojde k pádu vejce
     */
     //% block="Při pádu vejce"
-    export function kdyzSpadneVejce(akce: () => void) {
+    export function onEggDrop(action: () => void) {
         const eventId = 111 + Math.randomRange(0, 100);
 
         control.onEvent(eventId, 0, function () {
             control.inBackground(() => {
-                akce()
+                action()
             })
         })
 
         control.inBackground(() => {
             while (true) {
-                if (probihaHra && (x == 0 || x == 4 || y == 0 || y == 4)) {
-                    probihaHra = false
+                if (isGameInProgress && (x == 0 || x == 4 || y == 0 || y == 4)) {
+                    isGameInProgress = false
                     control.raiseEvent(eventId, 1)
                 }
                 basic.pause(20)
