@@ -88,12 +88,13 @@ basic.forever(function () {
 
 #### Kód
 ```
-let jeHraSpustena = false
-let souradnice: number[] = []
 input.onButtonPressed(Button.A, function () {
     basic.clearScreen()
     jeHraSpustena = !(jeHraSpustena)
 })
+let souradnice: number[] = []
+let jeHraSpustena = false
+balancing.setDifficulty(Difficulty.Normal)
 basic.forever(function () {
     if (jeHraSpustena) {
         balancing.tick()
