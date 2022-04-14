@@ -58,7 +58,7 @@ enum Difficulty {
 
 #### Bloky
 
-![Příklad hlasovače](https://github.com/SmutnyJan/pxt-voting-collector/blob/master/images/easyexample.png)
+![Příklad hlasovače](https://github.com/SmutnyJan/pxt-spoon-balancing/blob/master/images/easyexample.png)
 
 #### Kód
 
@@ -84,7 +84,7 @@ basic.forever(function () {
 ### Hra s detekcí podle souřadnic
 
 #### Bloky
-![Těžký příklad](https://github.com/SmutnyJan/pxt-voting-collector/blob/master/images/hardexample.png)
+![Těžký příklad](https://github.com/SmutnyJan/pxt-spoon-balancing/blob/master/images/hardexample.png)
 
 #### Kód
 ```
