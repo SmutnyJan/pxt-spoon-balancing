@@ -92,6 +92,7 @@ let jeHraSpustena = false
 let souradnice: number[] = []
 input.onButtonPressed(Button.A, function () {
     basic.clearScreen()
+    balancing.setDifficulty(Difficulty.Normal)
     jeHraSpustena = !(jeHraSpustena)
 })
 basic.forever(function () {
@@ -111,6 +112,7 @@ basic.forever(function () {
         jeHraSpustena = false
     }
 })
+
 ```
 
 
