@@ -9,8 +9,6 @@
     },
     "files": [
         "README.md",
-        "main.blocks",
-        "main.ts",
         "balancing.ts"
     ],
     "testFiles": [
